@@ -35,7 +35,7 @@ return [
     'no_source' => 'De hoofdtaal heeft geen tekst om te vertalen.',
     'export' => 'CSV exporteren',
     'import' => 'CSV importeren',
-    'preview' => ':changed teksten worden gewijzigd, :new zijn nieuw, :unmatched rijen kwamen met geen enkele afbeelding overeen.',
+    'preview' => 'Gewijzigde teksten: :changed · Nieuwe teksten: :new · Rijen zonder bijbehorende afbeelding: :unmatched',
     'apply' => 'Wijzigingen toepassen',
     'cancel' => 'Annuleren',
     'row_error' => 'Regel :line: :reason',

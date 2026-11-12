@@ -35,7 +35,7 @@ return [
     'no_source' => 'Die Hauptsprache hat keinen Text zum Übersetzen.',
     'export' => 'CSV exportieren',
     'import' => 'CSV importieren',
-    'preview' => ':changed Texte ändern sich, :new sind neu, :unmatched Zeilen passten zu keinem Bild.',
+    'preview' => 'Geänderte Texte: :changed · Neue Texte: :new · Zeilen ohne passendes Bild: :unmatched',
     'apply' => 'Änderungen übernehmen',
     'cancel' => 'Abbrechen',
     'row_error' => 'Zeile :line: :reason',

@@ -35,7 +35,7 @@ return [
     'no_source' => 'O idioma principal não tem texto para traduzir.',
     'export' => 'Exportar CSV',
     'import' => 'Importar CSV',
-    'preview' => ':changed textos vão mudar, :new são novos, :unmatched linhas não correspondem a nenhuma imagem.',
+    'preview' => 'Textos alterados: :changed · Textos novos: :new · Linhas sem imagem correspondente: :unmatched',
     'apply' => 'Aplicar alterações',
     'cancel' => 'Cancelar',
     'row_error' => 'Linha :line: :reason',

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+- Clearer wording in the CSV import preview, in every language
+- Smaller download: tests and source assets are left out of the package
+
 ## 1.0.0
 
 First release.

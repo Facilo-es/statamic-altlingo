@@ -35,7 +35,7 @@ return [
     'no_source' => 'La lingua principale non ha testi da tradurre.',
     'export' => 'Esporta CSV',
     'import' => 'Importa CSV',
-    'preview' => ':changed testi cambieranno, :new sono nuovi, :unmatched righe non corrispondono a nessuna immagine.',
+    'preview' => 'Testi modificati: :changed · Testi nuovi: :new · Righe senza immagine corrispondente: :unmatched',
     'apply' => 'Applica le modifiche',
     'cancel' => 'Annulla',
     'row_error' => 'Riga :line: :reason',
