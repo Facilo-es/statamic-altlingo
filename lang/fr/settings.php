@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'images' => 'Images concernées',
+    'containers' => 'Conteneurs',
+    'containers_help' => 'Laissez vide pour couvrir tous les conteneurs contenant des images.',
+    'field' => 'Handle du champ',
+    'field_help' => 'Le champ image qui contient le texte alternatif. En général alt.',
+    'fallbacks' => 'Langues de secours',
+    'fallback_help' => 'Si une image n’a pas de texte dans cette langue, essayer ces langues dans l’ordre.',
+    'when_missing' => 'Quand rien n’est trouvé dans :site',
+    'use_main' => 'Utiliser la langue principale',
+    'leave_empty' => 'Laisser vide',
+    'translation' => 'Traduction',
+    'provider' => 'Fournisseur',
+    'openai' => 'IA (compatible OpenAI)',
+    'key_found' => 'Clé trouvée dans .env',
+    'no_key' => 'Aucune clé dans .env',
+    'base_url' => 'URL de base',
+    'model' => 'Modèle',
+    'more_fields' => 'Autres champs',
+    'extra_fields' => 'Autres champs avec un texte par langue',
+    'extra_fields_help' => 'Comme le titre, la légende ou le crédit.',
+    'pro_card' => 'AltLingo Pro montre ce qui manque dans chaque langue et le comble vite : une vue de la couverture, une grille pour les modifications en masse, la traduction en un clic et le CSV pour vos traducteurs.',
+];

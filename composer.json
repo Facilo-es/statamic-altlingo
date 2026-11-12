@@ -1,0 +1,48 @@
+{
+    "name": "facilo/statamic-altlingo",
+    "description": "Alt text in every language of your Statamic multi-site.",
+    "type": "statamic-addon",
+    "license": "proprietary",
+    "keywords": ["statamic", "statamic-addon", "alt text", "alt", "multisite", "multi-site", "localization", "translate", "accessibility", "assets", "images"],
+    "homepage": "https://github.com/Facilo-es/statamic-altlingo",
+    "authors": [
+        {"name": "Facilo", "email": "support@facilo.es", "homepage": "https://facilo.es"}
+    ],
+    "support": {"email": "support@facilo.es"},
+    "autoload": {
+        "psr-4": {
+            "Facilo\\AltLingo\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Facilo\\AltLingo\\Tests\\": "tests"
+        }
+    },
+    "require": {
+        "php": "^8.3",
+        "statamic/cms": "^6.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.8 || ^11.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "pixelfear/composer-dist-plugin": true
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "AltLingo",
+            "description": "Alt text in every language of your multi-site.",
+            "editions": ["free", "pro"]
+        },
+        "laravel": {
+            "providers": [
+                "Facilo\\AltLingo\\ServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

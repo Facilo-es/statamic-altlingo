@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'images' => 'Afbeeldingen in bereik',
+    'containers' => 'Containers',
+    'containers_help' => 'Laat leeg om elke container met afbeeldingen te dekken.',
+    'field' => 'Veld-handle',
+    'field_help' => 'Het afbeeldingsveld dat de alt-tekst bevat. Meestal alt.',
+    'fallbacks' => 'Terugvaltalen',
+    'fallback_help' => 'Heeft een afbeelding geen tekst in deze taal, probeer dan deze talen op volgorde.',
+    'when_missing' => 'Als er niets wordt gevonden in :site',
+    'use_main' => 'Gebruik de hoofdtaal',
+    'leave_empty' => 'Leeg laten',
+    'translation' => 'Vertaling',
+    'provider' => 'Aanbieder',
+    'openai' => 'AI (OpenAI-compatibel)',
+    'key_found' => 'Sleutel gevonden in .env',
+    'no_key' => 'Geen sleutel in .env',
+    'base_url' => 'Basis-URL',
+    'model' => 'Model',
+    'more_fields' => 'Meer velden',
+    'extra_fields' => 'Andere velden met één tekst per taal',
+    'extra_fields_help' => 'Zoals titel, bijschrift of bronvermelding.',
+    'pro_card' => 'AltLingo Pro laat zien wat er in elke taal ontbreekt en vult het snel aan: een dekkingsoverzicht, een raster voor bulkbewerkingen, vertalen met één klik en CSV voor je vertalers.',
+];

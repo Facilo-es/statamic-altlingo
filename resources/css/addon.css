@@ -1,0 +1,5 @@
+@import '@statamic/cms/tailwind.css';
+@source '../js';
+
+/* The only motion in AltLingo: the translation progress bar. */
+.altlingo-progress > span { transition: width 0.3s ease; }

@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'images' => 'Images covered',
+    'containers' => 'Containers',
+    'containers_help' => 'Leave empty to cover every container with images.',
+    'field' => 'Field handle',
+    'field_help' => 'The image field that holds the alt text. Usually alt.',
+    'fallbacks' => 'Fallbacks',
+    'fallback_help' => 'If an image has no text in this language, try these languages in order.',
+    'when_missing' => 'When nothing is found in :site',
+    'use_main' => 'Use the main language',
+    'leave_empty' => 'Leave empty',
+    'translation' => 'Translation',
+    'provider' => 'Provider',
+    'openai' => 'AI (OpenAI-compatible)',
+    'key_found' => 'Key found in .env',
+    'no_key' => 'No key in .env',
+    'base_url' => 'Base URL',
+    'model' => 'Model',
+    'more_fields' => 'More fields',
+    'extra_fields' => 'Other fields with one text per language',
+    'extra_fields_help' => 'Such as title, caption or credit.',
+    'pro_card' => 'AltLingo Pro shows what\'s missing in every language and fills it fast: a coverage view, a grid for bulk edits, one-click translation and CSV for your translators.',
+];

@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'images' => 'Abgedeckte Bilder',
+    'containers' => 'Container',
+    'containers_help' => 'Leer lassen, um jeden Container mit Bildern abzudecken.',
+    'field' => 'Feld-Handle',
+    'field_help' => 'Das Bildfeld, das den Alternativtext enthält. Meistens alt.',
+    'fallbacks' => 'Ersatzsprachen',
+    'fallback_help' => 'Hat ein Bild in dieser Sprache keinen Text, werden diese Sprachen der Reihe nach probiert.',
+    'when_missing' => 'Wenn in :site nichts gefunden wird',
+    'use_main' => 'Hauptsprache verwenden',
+    'leave_empty' => 'Leer lassen',
+    'translation' => 'Übersetzung',
+    'provider' => 'Anbieter',
+    'openai' => 'KI (OpenAI-kompatibel)',
+    'key_found' => 'Schlüssel in .env gefunden',
+    'no_key' => 'Kein Schlüssel in .env',
+    'base_url' => 'Basis-URL',
+    'model' => 'Modell',
+    'more_fields' => 'Weitere Felder',
+    'extra_fields' => 'Andere Felder mit einem Text pro Sprache',
+    'extra_fields_help' => 'Zum Beispiel Titel, Bildunterschrift oder Credit.',
+    'pro_card' => 'AltLingo Pro zeigt, was in jeder Sprache fehlt, und füllt es schnell: Abdeckungsansicht, Raster für Massenbearbeitung, Übersetzung per Klick und CSV für deine Übersetzer.',
+];
