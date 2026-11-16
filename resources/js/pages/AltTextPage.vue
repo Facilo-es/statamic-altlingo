@@ -318,12 +318,15 @@ onMounted(() => load());
                                 <td
                                     v-for="site in sites"
                                     :key="site.handle"
-                                    class="cursor-text px-3 py-3"
+                                    class="cursor-text px-3 py-3 focus:outline-2 focus:-outline-offset-2 focus:outline-[var(--color-primary)]"
+                                    :tabindex="can.edit && site.editable && !(editing.id === row.id && editing.site === site.handle) ? 0 : undefined"
                                     :class="{
                                         'bg-red-50 dark:bg-red-950/40': row.status[site.handle] === 'missing',
                                         'bg-amber-50 dark:bg-amber-950/40': row.status[site.handle] === 'review',
                                     }"
                                     @click="editing.id === row.id && editing.site === site.handle ? null : startEdit(row, site)"
+                                    @keydown.enter.self.prevent="startEdit(row, site)"
+                                    @keydown.space.self.prevent="startEdit(row, site)"
                                 >
                                     <textarea
                                         v-if="editing.id === row.id && editing.site === site.handle"

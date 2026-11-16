@@ -2,11 +2,13 @@
 
 namespace Facilo\AltLingo\Tests\Feature;
 
+use Facilo\AltLingo\Store\AltRecord;
 use Facilo\AltLingo\Store\MetaStore;
 use Facilo\AltLingo\Tests\TestCase;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Sleep;
 use Statamic\Facades\User;
 
@@ -24,17 +26,10 @@ class TranslateTest extends TestCase
         Sleep::fake();
     }
 
-    protected function tearDown(): void
-    {
-        putenv('ALTLINGO_DEEPL_KEY');
-        unset($_ENV['ALTLINGO_DEEPL_KEY'], $_SERVER['ALTLINGO_DEEPL_KEY']);
-        parent::tearDown();
-    }
-
     private function withKey(): void
     {
-        putenv('ALTLINGO_DEEPL_KEY='.self::KEY);
-        $_ENV['ALTLINGO_DEEPL_KEY'] = $_SERVER['ALTLINGO_DEEPL_KEY'] = self::KEY;
+        // The key reaches the addon the way .env does: through config/altlingo.php.
+        config(['altlingo.deepl_key' => self::KEY]);
     }
 
     /** DeepL without Catalan; translate call 7 gets a 429 once. */
@@ -139,6 +134,65 @@ class TranslateTest extends TestCase
         $this->fakeDeepL();
         $asset = $this->image('o.png', 'Terraza');
 
+        $this->actingAs($this->admin())->postJson('/cp/altlingo/translate/image/'.base64_encode($asset->id()), ['site' => 'en'])
+            ->assertOk()->assertJson(['text' => 'EN-US: Terraza']);
+    }
+
+    /**
+     * Review of 1.0.1: Translate on a Pro extra field translates that field only, saves nothing,
+     * and leaves the hand-written alt text alone. A field that isn't configured is refused.
+     */
+    public function test_translate_caption_leaves_alt_unchanged(): void
+    {
+        $this->withKey();
+        $this->fakeDeepL();
+        $this->cfg->settings['extra_fields'] = ['caption'];
+        $asset = $this->blank('cap.png');
+        $record = new AltRecord(main: ['alt' => 'Terraza', 'caption' => 'Vista al mar'], texts: ['alt' => ['en' => 'Hand-written terrace']]);
+        $this->altlingo()->save($asset, $record);
+        $url = '/cp/altlingo/translate/image/'.base64_encode($asset->id());
+        $user = $this->admin();
+
+        $this->actingAs($user)->postJson($url, ['site' => 'en', 'field' => 'caption'])
+            ->assertOk()->assertJson(['text' => 'EN-US: Vista al mar']);
+
+        $saved = $this->altlingo()->record($this->fresh($asset));
+        $this->assertSame('Hand-written terrace', $saved->own('en', 'alt'));
+        $this->assertNull($saved->own('en', 'caption'), 'Nothing is written until the editor saves');
+        $this->assertFalse($saved->isReview('en'));
+        $this->assertSame('Terraza', $saved->mainText('alt'));
+
+        $this->actingAs($user)->postJson($url, ['site' => 'en', 'field' => 'title'])->assertStatus(422);
+        $this->actingAs($user)->postJson($url, ['site' => 'en', 'field' => 'alt'])->assertOk()->assertJson(['text' => 'EN-US: Terraza']);
+        $this->assertSame('Hand-written terrace', $this->altlingo()->record($this->fresh($asset))->own('en', 'alt'));
+    }
+
+    /**
+     * Review of 1.0.1: after `php artisan config:cache` Laravel no longer loads .env, so env() is null
+     * outside config files. The key must survive in the cached config and still translate.
+     */
+    public function test_t29_key_survives_config_cache(): void
+    {
+        $cache = sys_get_temp_dir().'/altlingo-config-'.uniqid().'.php';
+        try {
+            $result = Process::path(base_path())
+                ->env(['ALTLINGO_DEEPL_KEY' => self::KEY, 'APP_CONFIG_CACHE' => $cache])
+                ->run(['php', 'artisan', 'config:cache']);
+            $this->assertTrue($result->successful(), $result->errorOutput());
+            $cached = require $cache;
+        } finally {
+            @unlink($cache);
+        }
+        $this->assertSame(self::KEY, $cached['altlingo']['deepl_key']);
+
+        // Like a cached site: the environment has no key, only the cached config does.
+        putenv('ALTLINGO_DEEPL_KEY');
+        unset($_ENV['ALTLINGO_DEEPL_KEY'], $_SERVER['ALTLINGO_DEEPL_KEY']);
+        config(['altlingo' => $cached['altlingo']]);
+        $this->assertTrue($this->cfg->translatorConfigured());
+
+        $this->fakeDeepL();
+        $asset = $this->image('cached.png', 'Terraza');
         $this->actingAs($this->admin())->postJson('/cp/altlingo/translate/image/'.base64_encode($asset->id()), ['site' => 'en'])
             ->assertOk()->assertJson(['text' => 'EN-US: Terraza']);
     }

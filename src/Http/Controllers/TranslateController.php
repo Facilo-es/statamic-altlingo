@@ -79,17 +79,23 @@ class TranslateController extends CpController
         return $this->summary($this->state($run));
     }
 
-    /** Translate one empty tab of one image from the image editor. */
+    /**
+     * Translate one tab of one field from the image editor. Nothing is saved here: the text goes
+     * back to the form, and only the editor's Save writes it, so leaving unsaved keeps what was there.
+     */
     public function one(Request $request, string $image)
     {
         $this->proOnly();
         $this->authorize('translate altlingo');
+        $config = $this->altlingo()->config;
         $site = (string) $request->input('site');
+        $field = (string) $request->input('field', $config->field());
+        abort_unless(in_array($field, $config->fields(), true), 422);
         $this->authorizeSite($site);
         // The route parameter isn't named "asset": Statamic binds that name to its own asset routes.
         $asset = $this->asset(base64_decode($image, true) ?: $image);
 
-        $result = app(Manager::class)->translate($asset, $site, true);
+        $result = app(Manager::class)->translate($asset, $site, true, false, $field);
         abort_if($result['status'] !== 'ok', 422, $result['message'] ?? '');
 
         return ['text' => $result['text']];

@@ -123,10 +123,10 @@ class Config
         return $this->setting('provider', 'deepl') === 'openai' ? 'openai' : 'deepl';
     }
 
-    /** The key for the chosen provider, read from .env only. */
+    /** The key for the chosen provider, from .env through config/altlingo.php, so a cached config keeps it. */
     public function apiKey(): ?string
     {
-        $key = $this->provider() === 'openai' ? env('ALTLINGO_OPENAI_KEY') : env('ALTLINGO_DEEPL_KEY');
+        $key = config($this->provider() === 'openai' ? 'altlingo.openai_key' : 'altlingo.deepl_key');
 
         return is_string($key) && trim($key) !== '' ? trim($key) : null;
     }

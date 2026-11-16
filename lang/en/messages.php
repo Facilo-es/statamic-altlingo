@@ -54,7 +54,6 @@ return [
     'perm_view' => 'View alt text coverage',
     'perm_edit' => 'Edit alt texts in bulk',
     'perm_translate' => 'Run translations',
-    'perm_configure' => 'Configure AltLingo',
     'page_of' => 'Page :page of :pages',
     'images_count' => ':n images',
     'decorative_row' => 'The site outputs alt="" in every language.',

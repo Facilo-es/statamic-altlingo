@@ -54,7 +54,6 @@ return [
     'perm_view' => 'Dekking van alt-teksten bekijken',
     'perm_edit' => 'Alt-teksten in bulk bewerken',
     'perm_translate' => 'Vertalingen uitvoeren',
-    'perm_configure' => 'AltLingo configureren',
     'page_of' => 'Pagina :page van :pages',
     'images_count' => ':n afbeeldingen',
     'decorative_row' => 'De site geeft in elke taal alt="" weer.',

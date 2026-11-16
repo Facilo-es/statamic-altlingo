@@ -22,7 +22,7 @@ Statamic keeps one alt text per image, so on a multi-site your Spanish pages rea
 
 Images found in Google Images in every language, and screen readers that read the description in the visitor's language.
 
-No lock-in: your main text stays in Statamic's own `alt` field, and when Statamic adds per-language asset fields, one command moves your texts there.
+No lock-in: your main text stays in Statamic's own `alt` field, so removing AltLingo leaves a working site. A command to move your texts into Statamic's own per-language asset fields, once Statamic has them, is planned.
 
 ## Requirements
 
@@ -78,6 +78,10 @@ This works in Antlers, Blade, Bard image nodes, Glide tags, the REST API (`?site
 - **Field handle:** the field that holds the alt text, usually `alt`.
 - **Pro:** fallbacks per language, translation provider, and more fields with one text per language (such as caption or credit).
 
+Who can change these settings is Statamic's own permission **AltLingo settings** (`edit facilo/statamic-altlingo settings`). Give it only to people you trust with the key: the AI provider's address is a setting, and the key is sent there.
+
+**More fields (Pro):** `altlingo:install` converts only the alt field. For each extra field, such as `caption` or `credit`, add it to the container's blueprint (Blueprints → Asset Containers) with the **AltLingo** fieldtype, using the same handle you list in the settings. The Translate button then translates that field only.
+
 ## Translation keys (Pro)
 
 Translation uses your own account. Put the key in `.env`, never in the control panel:
@@ -87,16 +91,18 @@ ALTLINGO_DEEPL_KEY=your-deepl-key        # keys ending in :fx use DeepL Free
 ALTLINGO_OPENAI_KEY=your-key             # for the AI option (OpenAI-compatible)
 ```
 
-The key is read from `.env` only. AltLingo never logs it, never sends it to the browser and never writes it to a YAML file. Without a key, the Translate buttons don't show.
+The key is read from `.env` only, through the addon's config file, so it keeps working after `php artisan config:cache` or `optimize`. AltLingo never logs it, never sends it to the browser and never writes it to a YAML file. Without a key, the Translate buttons don't show.
 
 ## Permissions
 
 - `view altlingo`: the Alt text page and the dashboard widget
 - `edit altlingo`: the grid, bulk actions and CSV import
 - `translate altlingo`: run translations, which can cost money on your provider account
-- `configure altlingo`: the settings
+- Settings: Statamic's own `edit facilo/statamic-altlingo settings` permission
 
 Site access uses Statamic's own site permissions, on every action: a user who can't access a site sees its tab read-only and can't save it through any route.
+
+`view altlingo` and `edit altlingo` cover every container AltLingo covers (see Settings → Containers). The Alt text page, CSV and bulk translation don't check Statamic's per-container asset permissions, so to keep a role away from a container, leave that container out of AltLingo's settings or don't give the role these permissions.
 
 ## Data format
 

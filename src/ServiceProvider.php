@@ -41,6 +41,8 @@ class ServiceProvider extends AddonServiceProvider
     {
         parent::register();
 
+        $this->mergeConfigFrom(__DIR__.'/../config/altlingo.php', 'altlingo');
+
         $this->app->singleton(Config::class);
         $this->app->bind(AltStore::class, MetaStore::class);
         $this->app->singleton(AltLingo::class);
@@ -79,7 +81,6 @@ class ServiceProvider extends AddonServiceProvider
                         ]),
                     ]);
                 });
-                Permission::register('configure altlingo')->label(__('altlingo::messages.perm_configure'));
             });
         });
     }

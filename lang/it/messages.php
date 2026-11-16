@@ -54,7 +54,6 @@ return [
     'perm_view' => 'Vedere la copertura dei testi alternativi',
     'perm_edit' => 'Modificare i testi alternativi in blocco',
     'perm_translate' => 'Avviare le traduzioni',
-    'perm_configure' => 'Configurare AltLingo',
     'page_of' => 'Pagina :page di :pages',
     'images_count' => ':n immagini',
     'decorative_row' => 'Il sito produce alt="" in ogni lingua.',

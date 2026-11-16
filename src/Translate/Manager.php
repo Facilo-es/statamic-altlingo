@@ -33,11 +33,13 @@ class Manager
     }
 
     /**
+     * $field is the alt field unless given; callers check it is one of Config::fields().
+     *
      * @return array{status: 'ok'|'skipped'|'failed', text?: string, message?: string}
      */
-    public function translate(Asset $asset, string $site, bool $overwrite = false, bool $save = true): array
+    public function translate(Asset $asset, string $site, bool $overwrite = false, bool $save = true, ?string $field = null): array
     {
-        $field = $this->altlingo->config->field();
+        $field ??= $this->altlingo->config->field();
         $main = $this->altlingo->config->mainSite();
         $record = $this->altlingo->record($asset);
 
