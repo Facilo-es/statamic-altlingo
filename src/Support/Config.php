@@ -7,7 +7,7 @@ use Statamic\Facades\AssetContainer;
 use Statamic\Facades\Site;
 
 /**
- * Reads AltLingo's settings and edition, and Statamic's sites, in one place.
+ * Reads AltLingo's settings and Statamic's sites in one place.
  */
 class Config
 {
@@ -18,11 +18,6 @@ class Config
     public function addon()
     {
         return Addon::get(self::PACKAGE);
-    }
-
-    public function isPro(): bool
-    {
-        return $this->addon()?->edition() === 'pro';
     }
 
     /** Statamic builds the settings blueprint while loading settings, and that blueprint reads this class. */
@@ -49,14 +44,10 @@ class Config
         return (string) $this->setting('field', 'alt');
     }
 
-    /**
-     * The alt field first, then the extra Pro fields (F10).
-     */
+    /** The fields AltLingo stores per language. */
     public function fields(): array
     {
-        $extra = $this->isPro() ? array_values((array) $this->setting('extra_fields', [])) : [];
-
-        return array_values(array_unique(array_merge([$this->field()], array_diff($extra, [$this->field()]))));
+        return [$this->field()];
     }
 
     public function mainSite(): string
@@ -75,35 +66,6 @@ class Config
         return count($this->sites()) > 1;
     }
 
-    /** @return array<string, array<int, string>> */
-    public function chains(): array
-    {
-        if (! $this->isPro()) {
-            return [];
-        }
-
-        $chains = [];
-        foreach ($this->sites() as $site) {
-            $chain = array_values(array_filter((array) $this->setting("fallback_{$site}", []), fn ($s) => $s !== $site && in_array($s, $this->sites(), true)));
-            if ($chain) {
-                $chains[$site] = $chain;
-            }
-        }
-
-        return $chains;
-    }
-
-    /** @return array<string, string> 'main' or 'empty' per site */
-    public function whenMissing(): array
-    {
-        $out = [];
-        foreach ($this->sites() as $site) {
-            $out[$site] = $this->isPro() && $this->setting("missing_{$site}") === 'empty' ? 'empty' : 'main';
-        }
-
-        return $out;
-    }
-
     /** @return array<int, string> handles of covered containers */
     public function containers(): array
     {
@@ -115,25 +77,7 @@ class Config
 
     public function resolver(): \Facilo\AltLingo\Resolver
     {
-        return (new \Facilo\AltLingo\Resolver($this->mainSite(), $this->sites(), $this->chains(), $this->whenMissing()))->withAltField($this->field());
-    }
-
-    public function provider(): string
-    {
-        return $this->setting('provider', 'deepl') === 'openai' ? 'openai' : 'deepl';
-    }
-
-    /** The key for the chosen provider, from .env through config/altlingo.php, so a cached config keeps it. */
-    public function apiKey(): ?string
-    {
-        $key = config($this->provider() === 'openai' ? 'altlingo.openai_key' : 'altlingo.deepl_key');
-
-        return is_string($key) && trim($key) !== '' ? trim($key) : null;
-    }
-
-    public function translatorConfigured(): bool
-    {
-        return app()->bound('altlingo.translator.fake') || $this->apiKey() !== null;
+        return (new \Facilo\AltLingo\Resolver($this->mainSite(), $this->sites()))->withAltField($this->field());
     }
 
     public static function isImage(string $extension): bool

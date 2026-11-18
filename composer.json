@@ -34,8 +34,7 @@
     "extra": {
         "statamic": {
             "name": "AltLingo",
-            "description": "Alt text in every language of your multi-site.",
-            "editions": ["free", "pro"]
+            "description": "Alt text in every language of your multi-site."
         },
         "laravel": {
             "providers": [

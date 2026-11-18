@@ -88,8 +88,6 @@ class AltLingo extends Fieldtype
             'sites' => $sites,
             'mainSite' => $config->mainSite(),
             'isAltField' => $handle === $config->field(),
-            'pro' => $config->isPro(),
-            'canTranslate' => $config->isPro() && (bool) $user?->can('translate altlingo') && $config->translatorConfigured(),
             'record' => [
                 'main' => $record->mainText($handle),
                 'sites' => $record->texts[$handle] ?? new \stdClass,
@@ -98,7 +96,6 @@ class AltLingo extends Fieldtype
                 'machine' => $record->machine,
             ],
             'fallbacks' => collect($config->sites())->mapWithKeys(fn ($s) => [$s => $resolver->source($record, $s, $handle)])->all(),
-            'translateUrl' => $asset && $config->isPro() ? cp_route('altlingo.translate-one', ['image' => base64_encode($asset->id())]) : null,
             'strings' => __('altlingo::fieldtype'),
         ];
     }

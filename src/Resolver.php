@@ -21,14 +21,10 @@ class Resolver
 
     /**
      * @param  array<int, string>  $sites
-     * @param  array<string, array<int, string>>  $chains  Fallback chain per site (Pro).
-     * @param  array<string, string>  $whenMissing  'main' or 'empty' per site (Pro; Free is always 'main').
      */
     public function __construct(
         public readonly string $main,
         public readonly array $sites,
-        public readonly array $chains = [],
-        public readonly array $whenMissing = [],
     ) {
     }
 
@@ -46,21 +42,7 @@ class Resolver
      */
     private function find(AltRecord $record, string $site, string $field): ?string
     {
-        if (($text = $this->direct($record, $site, $field)) !== null) {
-            return $text;
-        }
-
-        foreach ($this->chains[$site] ?? [] as $next) {
-            if (($text = $this->direct($record, $next, $field)) !== null) {
-                return $text;
-            }
-        }
-
-        if (($this->whenMissing[$site] ?? 'main') === 'empty') {
-            return null;
-        }
-
-        return $record->mainText($field);
+        return $this->direct($record, $site, $field) ?? $record->mainText($field);
     }
 
     private function direct(AltRecord $record, string $site, string $field): ?string
@@ -94,13 +76,7 @@ class Resolver
             return $site;
         }
 
-        foreach ($this->chains[$site] ?? [] as $next) {
-            if ($this->direct($record, $next, $field) !== null) {
-                return $next;
-            }
-        }
-
-        return ($this->whenMissing[$site] ?? 'main') !== 'empty' && $record->mainText($field) !== null ? $this->main : null;
+        return $record->mainText($field) !== null ? $this->main : null;
     }
 
     private function isAlt(string $field): bool

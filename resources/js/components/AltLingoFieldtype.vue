@@ -2,7 +2,7 @@
 import { computed, reactive, ref } from 'vue';
 import { Fieldtype } from '@statamic/cms';
 import { Badge, Button, Switch, Textarea, Select } from '@statamic/cms/ui';
-import { STATES, t, send } from '../states.js';
+import { STATES, t } from '../states.js';
 
 const emit = defineEmits(Fieldtype.emits);
 const props = defineProps(Fieldtype.props);
@@ -21,8 +21,6 @@ const state = reactive({
     review: [...(meta.record.review || [])],
 });
 const current = ref(main.handle);
-const busy = ref(false);
-const error = ref(null);
 
 const site = computed(() => meta.sites.find((x) => x.handle === current.value));
 const text = computed(() => (site.value.main ? state.main : (state.sites[current.value] ?? '')));
@@ -68,21 +66,6 @@ function markReviewed() {
 function toggleDecorative(on) {
     state.decorative = on;
     emitValue();
-}
-
-async function translate() {
-    busy.value = true;
-    error.value = null;
-    try {
-        const data = await send(meta.translateUrl, { site: current.value, field: props.handle });
-        state.sites[current.value] = data.text;
-        if (!state.review.includes(current.value)) state.review.push(current.value);
-        emitValue();
-    } catch (e) {
-        error.value = e.message;
-    } finally {
-        busy.value = false;
-    }
 }
 </script>
 
@@ -137,15 +120,7 @@ async function translate() {
             />
             <p v-if="!site.editable" class="mt-1 text-xs text-gray-500">{{ s.no_access }}</p>
             <p v-if="text.length > 125" class="mt-1.5 text-xs text-amber-700 dark:text-amber-400">{{ s.long_hint }}</p>
-            <p v-if="error" class="mt-1.5 text-xs text-red-600">{{ error }}</p>
             <div class="mt-2 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-                <Button
-                    v-if="!site.main && meta.canTranslate && meta.translateUrl && !locked"
-                    size="sm"
-                    :loading="busy"
-                    :text="busy ? s.translating : t(s.translate, { language: main.name })"
-                    @click="translate"
-                />
                 <span class="flex-1" />
                 <span>{{ t(s.characters, { n: text.length }) }}</span>
             </div>

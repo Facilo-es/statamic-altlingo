@@ -78,35 +78,4 @@ class AltLingo
     {
         return $asset->blueprint()?->field($field)?->type() === 'altlingo';
     }
-
-    /**
-     * A person writes one site's alt text (grid, CSV). Their text is no longer To review, and a new
-     * main text sends machine translations back to To review. Returns false if nothing changed.
-     */
-    public function edit(Asset $asset, string $site, ?string $text, bool $review = false): bool
-    {
-        $field = $this->config->field();
-        $record = $this->record($asset);
-        $main = $site === $this->config->mainSite();
-        $before = $main ? $record->mainText($field) : $record->own($site, $field);
-
-        if (AltRecord::clean($text) === $before) {
-            return false;
-        }
-
-        if ($main) {
-            $record->setMain($text, $field);
-            foreach ($record->machine as $other) {
-                if ($record->own($other, $field) !== null) {
-                    $record->markReview($other);
-                }
-            }
-        } else {
-            $record->setOwn($site, $text, $field)->markReview($site, $review && AltRecord::clean($text) !== null)->markMachine($site, false);
-        }
-
-        $this->save($asset, $record);
-
-        return true;
-    }
 }

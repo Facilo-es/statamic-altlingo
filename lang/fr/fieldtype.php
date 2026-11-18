@@ -13,8 +13,6 @@ return [
     'decorative_switch' => 'Image décorative, aucune description nécessaire',
     'long_hint' => 'Plus court, c’est mieux. Les lecteurs d’écran lisent tout.',
     'characters' => ':n caractères',
-    'translate' => 'Traduire depuis :language',
-    'translating' => 'Traduction en cours…',
     'to_review' => 'À relire',
     'to_review_tip' => 'Traduit automatiquement. Relisez-le et enregistrez, ou cliquez sur Marquer comme relu.',
     'mark_reviewed' => 'Marquer comme relu',

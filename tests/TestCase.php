@@ -3,7 +3,6 @@
 namespace Facilo\AltLingo\Tests;
 
 use Facilo\AltLingo\AltLingo;
-use Facilo\AltLingo\Coverage\CoverageCache;
 use Facilo\AltLingo\Store\AltRecord;
 use Facilo\AltLingo\Store\AltStore;
 use Facilo\AltLingo\Store\MetaStore;
@@ -46,7 +45,6 @@ abstract class TestCase extends BaseTestCase
         $this->app->instance(Config::class, $this->cfg);
         $this->app->singleton(AltStore::class, $this->store);
         $this->app->forgetInstance(AltLingo::class);
-        $this->app->forgetInstance(CoverageCache::class);
 
         $this->container = 't'.substr(md5(uniqid('', true)), 0, 8);
         $root = storage_path('altlingo-tests/'.$this->container);
@@ -103,12 +101,6 @@ abstract class TestCase extends BaseTestCase
             'C' => $this->image('c.png', 'Terraza'),
             'D' => $this->image('d.png', '', ['en' => 'Terrace']),
         ];
-    }
-
-    protected function proSettingsForExamples(): void
-    {
-        $this->cfg->settings['fallback_es_mx'] = ['es'];
-        $this->cfg->settings['missing_ca'] = 'empty';
     }
 
     protected function meta(AssetContract $asset): array

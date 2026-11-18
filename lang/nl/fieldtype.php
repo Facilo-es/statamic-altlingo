@@ -13,8 +13,6 @@ return [
     'decorative_switch' => 'Decoratieve afbeelding, geen beschrijving nodig',
     'long_hint' => 'Kort is beter. Schermlezers lezen alles voor.',
     'characters' => ':n tekens',
-    'translate' => 'Vertaal vanuit :language',
-    'translating' => 'Bezig met vertalen…',
     'to_review' => 'Te controleren',
     'to_review_tip' => 'Automatisch vertaald. Controleer de tekst en sla op, of klik op Markeer als gecontroleerd.',
     'mark_reviewed' => 'Markeer als gecontroleerd',

@@ -13,8 +13,6 @@ return [
     'decorative_switch' => 'Dekoratives Bild, keine Beschreibung nötig',
     'long_hint' => 'Kurz ist besser. Screenreader lesen den ganzen Text vor.',
     'characters' => ':n Zeichen',
-    'translate' => 'Aus :language übersetzen',
-    'translating' => 'Wird übersetzt…',
     'to_review' => 'Zu prüfen',
     'to_review_tip' => 'Automatisch übersetzt. Prüfe den Text und speichere, oder klicke auf Als geprüft markieren.',
     'mark_reviewed' => 'Als geprüft markieren',

@@ -30,35 +30,44 @@ class EditionTest extends TestCase
         return $fields;
     }
 
-    /** T24: Free keeps the field, resolver and coverage, has no Pro routes, and one upsell card. */
-    public function test_t24_free_edition(): void
+    /** T24: the free package has every feature, no control panel pages of its own, and a short settings page. */
+    public function test_t24_free_package(): void
     {
-        $this->cfg->pro = false;
         $this->fixtureAtoD();
 
         $this->assertSame('Terrace', $this->altlingo()->resolve($this->fresh($this->image('e.png', 'Terraza', ['en' => 'Terrace'])), 'en'));
         $this->assertSame('Terraza', $this->altlingo()->resolve($this->fresh($this->image('f.png', 'Terraza')), 'ca'));
-        $this->assertNotEmpty(app(\Facilo\AltLingo\Coverage\CoverageCache::class)->totals());
 
         $admin = $this->admin();
-        foreach (['get' => ['/cp/altlingo', '/cp/altlingo/rows', '/cp/altlingo/export'], 'post' => ['/cp/altlingo/cell', '/cp/altlingo/bulk', '/cp/altlingo/translate', '/cp/altlingo/translate/batch', '/cp/altlingo/import/preview', '/cp/altlingo/import/apply', '/cp/altlingo/translate/image/eA']] as $method => $urls) {
-            foreach ($urls as $url) {
-                $this->actingAs($admin)->{$method.'Json'}($url)->assertNotFound();
-            }
+        foreach (['/cp/altlingo', '/cp/altlingo/rows', '/cp/altlingo/export'] as $url) {
+            $this->actingAs($admin)->getJson($url)->assertNotFound();
         }
 
-        $fields = $this->settingsFields();
-        $this->assertSame(['containers', 'field', 'pro_card'], $fields);
-        $this->assertStringContainsString('statamic.com/addons/facilo/altlingo', json_encode(SettingsBlueprint::make($this->cfg), JSON_UNESCAPED_SLASHES));
+        $this->assertSame(['containers', 'field'], $this->settingsFields());
 
         $meta = (new AltLingoFieldtype)->preload();
-        $this->assertFalse($meta['pro']);
-        $this->assertFalse($meta['canTranslate']);
-        $this->assertNull($meta['translateUrl']);
+        foreach (['pro', 'canTranslate', 'translateUrl'] as $key) {
+            $this->assertArrayNotHasKey($key, $meta);
+        }
+    }
 
-        $this->cfg->pro = true;
-        $this->assertNotContains('pro_card', $this->settingsFields());
-        $this->assertContains('fallback_en', $this->settingsFields());
+    /** The public package holds no paid edition: no Pro code, edition, licence line or text. */
+    public function test_no_paid_edition_in_package(): void
+    {
+        $root = dirname(__DIR__, 2);
+        $composer = json_decode(file_get_contents($root.'/composer.json'), true);
+        $this->assertArrayNotHasKey('editions', $composer['extra']['statamic']);
+
+        $files = [$root.'/composer.json', $root.'/LICENSE.md', $root.'/README.md', $root.'/CHANGELOG.md', $root.'/SECURITY.md'];
+        foreach (['src', 'lang', 'resources/js', 'resources/dist'] as $dir) {
+            foreach (\Illuminate\Support\Facades\File::allFiles($root.'/'.$dir) as $file) {
+                $files[] = $file->getPathname();
+            }
+        }
+        foreach ($files as $file) {
+            // "pro" alone is German for "per" in lang/de, so the check looks for the paid features' words instead.
+            $this->assertDoesNotMatchRegularExpression('/AltLingo Pro|Pro edition|isPro\b|edition\(|[\'"]pro[\'"]|DeepL|OpenAI|translateUrl|altlingo\.translate|CoverageCache|fallback_|extra_fields/i', file_get_contents($file), basename($file).' must not hold paid code or text');
+        }
     }
 
     /** T25: the addon never checks the licence, so an invalid one changes nothing on the front end. */
@@ -89,9 +98,5 @@ class EditionTest extends TestCase
         $asset->set('alt', 'Terraza')->save();
         $this->assertSame('Terraza', $this->fresh($asset)->get('alt'));
         $this->assertSame('Terraza', $this->altlingo()->resolve($this->fresh($asset), 'es'));
-
-        $page = $this->actingAs($this->admin())->get('/cp/altlingo')->assertOk()->getContent();
-        $this->assertStringContainsString('&quot;multisite&quot;:false', $page);
-        $this->assertStringContainsString('single_site', json_encode(__('altlingo::messages')));
     }
 }

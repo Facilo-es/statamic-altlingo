@@ -13,8 +13,6 @@ return [
     'decorative_switch' => 'Immagine decorativa, non serve una descrizione',
     'long_hint' => 'Meglio breve. Gli screen reader leggono tutto.',
     'characters' => ':n caratteri',
-    'translate' => 'Traduci da :language',
-    'translating' => 'Traduzione in corso…',
     'to_review' => 'Da rivedere',
     'to_review_tip' => 'Tradotto automaticamente. Controllalo e salva, oppure clicca su Segna come rivisto.',
     'mark_reviewed' => 'Segna come rivisto',

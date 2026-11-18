@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.4
+
+- Leaner package: only the features described in the README. Texts you've already saved are kept
+- Shorter settings page: the images covered and the field that holds the alt text
+
 ## 1.0.3
 
 - README: describes only what you can use today, with a 3-step start and what AltLingo doesn't do
